@@ -84,8 +84,8 @@ else
             # Email wallet locked notifications
             #
             SUBJECT="QTUM Wallet is Locked"
-            echo -e "FROM: $SENDER\nTO: $NOTIFYRECIPIENT\nSubject: $SUBJECT\n\n\n\nQTUM Wallet is Locked!\n\nPlease log in and unlock it." | /usr/sbin/sendmail -t
-            echo -e "FROM: $SENDER\nTO: $INFORECIPIENT\nSubject: $SUBJECT\n\nQTUM Wallet is Locked!\n\nPlease log in and unlock it." | /usr/sbin/sendmail -t
+            echo -e "FROM: $SENDER\nTO: $NOTIFYRECIPIENT\nSubject: $SUBJECT\n\n\n\nQTUM Wallet is Locked.\n\nPlease log in and unlock it." | /usr/sbin/sendmail -t
+            echo -e "FROM: $SENDER\nTO: $INFORECIPIENT\nSubject: $SUBJECT\n\nQTUM Wallet is Locked.\n\nPlease log in and unlock it." | /usr/sbin/sendmail -t
             #
             # Create locked_notify flag
             #
