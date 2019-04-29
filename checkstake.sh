@@ -18,8 +18,8 @@ LOGDIR=$HOMEDIR/$SCRIPTDIR/logs
 WORKDIR=$HOMEDIR/$SCRIPTDIR/work
 PREVIOUSSTAKEFILE=$WORKDIR/stake.previous.value
 CURRENTSTAKEFILE=$WORKDIR/stake.current.value
-PREVIOUSINFOFILE=$WORKDIR/getinfo.previous
-CURRENTINFOFILE=$WORKDIR/getinfo.current
+PREVIOUSINFOFILE=$WORKDIR/getwalletinfo.previous
+CURRENTINFOFILE=$WORKDIR/getwalletinfo.current
 #
 ######################
 # Code Execution Below
@@ -67,7 +67,7 @@ else
     #
     # Get info from QTUM wallet
     #
-    $QTUMCLI getinfo > $CURRENTINFOFILE
+    $QTUMCLI getwalletinfo > $CURRENTINFOFILE
     #
     # Check if wallet is unlocked - if not, send notifications
     #
@@ -127,7 +127,7 @@ else
         until [ $CURRENTBLOCK -ge $TARGETBLOCK ]; do
             #
             sleep 10
-            LATESTSTAKE=`$QTUMCLI getinfo |grep "\"stake\"\:" |cut -d ':' -f2 |sed 's/ //g' |sed 's/,//g'`
+            LATESTSTAKE=`$QTUMCLI getwalletinfo |grep "\"stake\"\:" |cut -d ':' -f2 |sed 's/ //g' |sed 's/,//g'`
             #
             # If latest stake value equals previous stake value,
             # then log orphaned stake and exit
@@ -139,7 +139,7 @@ else
                 exit
             fi
             #
-            CURRENTBLOCK=`$QTUMCLI getinfo |grep "blocks" |cut -d ':' -f2 |sed 's/ //g' |sed 's/,//g'`
+            CURRENTBLOCK=`$QTUMCLI getwalletinfo |grep "blocks" |cut -d ':' -f2 |sed 's/ //g' |sed 's/,//g'`
         done
         #
         # 6 confirmations have completed - stake change is valid
@@ -158,7 +158,7 @@ else
         PREVIOUSINFO=$(<$PREVIOUSINFOFILE)
         #
         echo -e "FROM: $SENDER\nTO: $NOTIFYRECIPIENT\nSubject: $SUBJECT\n\n\n\nCurrent stake: $CURRENTSTAKE\n\nPrevious stake: $PREVIOUSSTAKE\n\nCheck email for more information..." | /usr/sbin/sendmail -t
-        echo -e "FROM: $SENDER\nTO: $INFORECIPIENT\nSubject: $SUBJECT\n\nQTUM Stake Change...\n\nCurrent getinfo:\n\n$CURRENTINFO\n\nPrevious getinfo:\n\n$PREVIOUSINFO" | /usr/sbin/sendmail -t
+        echo -e "FROM: $SENDER\nTO: $INFORECIPIENT\nSubject: $SUBJECT\n\nQTUM Stake Change...\n\nCurrent getwalletinfo:\n\n$CURRENTINFO\n\nPrevious getwalletinfo:\n\n$PREVIOUSINFO" | /usr/sbin/sendmail -t
         #
         mv $CURRENTSTAKEFILE $PREVIOUSSTAKEFILE
         mv $CURRENTINFOFILE $PREVIOUSINFOFILE
